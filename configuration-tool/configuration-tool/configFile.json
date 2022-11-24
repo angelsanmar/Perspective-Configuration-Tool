@@ -1,0 +1,107 @@
+{
+	"artworks": {
+		"Inventary": {
+			"type": "String",
+			"similarity": "EqualSimilarityDAO"
+		},
+		"Collection": {
+			"type": "String",
+			"similarity": "EqualSimilarityDAO"
+		},
+		"Author": {
+			"type": "String",
+			"similarity": "EqualSimilarityDAO"
+		},
+		"Year": {
+			"type": "Number",
+			"similarity": "NumberSimilarityDAO"
+		},
+		"Artwork_start_date": {
+			"type": "Number",
+			"similarity": "NumberSimilarityDAO"
+		},
+		"Artwork_end_date": {
+			"type": "Number",
+			"similarity": "NumberSimilarityDAO"
+		},
+		"Artist_birth_date": {
+			"type": "Number",
+			"similarity": "NumberSimilarityDAO"
+		},
+		"Artist_death_date": {
+			"type": "Number",
+			"similarity": "NumberSimilarityDAO"
+		},
+		"Gender": {
+			"type": "String",
+			"similarity": "EqualSimilarityDAO"
+		},
+		"Artist_country": {
+			"type": "String",
+			"similarity": "TaxonomySimilarityDAO"
+		},
+		"Artist_secondary_country": {
+			"type": "String",
+			"similarity": "TaxonomySimilarityDAO"
+		},
+		"Artwork_Artistic_Movement": {
+			"type": "String",
+			"similarity": "TaxonomySimilarityDAO"
+		},
+		"Secondary_Artwork_Artistic_Movement": {
+			"type": "String",
+			"similarity": "TaxonomySimilarityDAO"
+		},
+		"Technique": {
+			"type": "String",
+			"similarity": "TaxonomySimilarityDAO"
+		},
+		"Artwork_type": {
+			"type": "String",
+			"similarity": "EqualSimilarityDAO"
+		},
+		"Size_height": {
+			"type": "Number",
+			"similarity": "NumberSimilarityDAO"
+		},
+		"Size_width": {
+			"type": "Number",
+			"similarity": "NumberSimilarityDAO"
+		},
+		"Size_depth": {
+			"type": "String",
+			"similarity": "NumberSimilarityDAO"
+		},
+		"Materials": {
+			"type": "String",
+			"similarity": "TaxonomySimilarityDAO"
+		},
+		"Iconclass_subjects_curators": {
+			"type": "String",
+			"similarity": "IconClassSimilarityDAO"
+		}
+	},
+	"users": {
+		"id": {
+			"type": "String",
+			"similarity": "equalSimilarity"
+		},
+		"name": {
+			"type": "String",
+			"similarity": "equalSimilarity"
+		}
+	},
+	"interactions": {
+		"emotions": {
+			"type": "String",
+			"similarity": "ExtendedPlutchikEmotionSimilarityDAO"
+		},
+		"sentiments": {
+			"type": "String",
+			"similarity": "SentimentSimilarityDAO"
+		}
+	},
+	"interaction_key": {
+		"name": "artworkId"
+	}
+}

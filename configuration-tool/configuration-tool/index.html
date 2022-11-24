@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <script src="behaviour.js"></script>
+    <title>configurator</title>
+</head>
+
+<body>
+
+    <form id="form-config" action="" method="get">
+        <div class="config-sentence">
+            <select id="similarity-1" name="sim-1">
+                <option value="same">Same</option>
+                <option value="similar">Similar</option>
+                <option value="different">Different</option>
+            </select>
+            <select id="similarity-object-1" name="sim-obj-1">
+                
+            </select>
+            <span> in </span>
+            <select id="similarity-2" name="sim-2">
+                <option value="same">Same</option>
+                <option value="similar">Similar</option>
+                <option value="different">Different</option>
+            </select>
+            <span> artworks.</span>
+        </div>
+        <fieldset id="artwork-attribs">
+            <legend>Artwork attributes</legend>
+        </fieldset>
+
+        <div>
+            <fieldset id="citizen-attribs">
+                <legend>Citizen atributes (employed in visual dimensions -- no more than two)</legend>
+            </fieldset>
+        </div>
+        <input type="submit" value="Enviar">
+    </form>
+
+    <textarea readonly>
+
+    </textarea>
+
+</body>
+
+</html>

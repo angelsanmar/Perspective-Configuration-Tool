@@ -1,0 +1,27 @@
+body, 
+select {
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-size: 18px;
+}
+.hidden {
+    visibility: hidden;
+}
+
+legend {
+    font-size: 0.8em;
+}
+
+.config-sentence {
+    padding: 2em;
+    display: inline-block;
+}
+
+#artwork-attribs,
+#citizen-attribs {
+    display: inline-block;
+}
+
+textarea {
+    width: 400px;
+    overflow-y:hidden;
+}
