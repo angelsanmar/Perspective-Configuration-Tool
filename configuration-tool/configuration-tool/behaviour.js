@@ -70,8 +70,8 @@ function send(config = { "test": "test" }) {
   })
     .then(res => res.json())
     .then(function (res) {
-      window.alert(res);
-      window.alert(Object.keys(res));
+      console.log(res)
+      window.alert("inserted perspectiveId: " + res.insertedPerspectiveId);
     })
     .catch(function (err) {
       window.alert(err);
@@ -86,7 +86,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
 
   // http://localhost:8080/v1.1/seed
   // ./configFile_ParsedOutput.json
-  fetch("./configFile_ParsedOutput.json") // Call the fetch function passing the url of the API as a parameter
+  fetch("http://localhost:8080/v1.1/seed") // Call the fetch function passing the url of the API as a parameter
     .then(configObj => configObj.json())
     .then(function (configObj) {
       // First, hide artwork attribute selection
@@ -122,7 +122,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
         let theTextarea = document.getElementsByTagName("textarea")[0];
         theTextarea.value = JSON.stringify(newConfig, null, 4);
         theTextarea.style.height = (theTextarea.scrollHeight) + "px";
-        // send(newConfig)
+        send(newConfig)
       }
     })
     .catch(function (err) {
