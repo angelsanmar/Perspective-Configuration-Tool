@@ -218,7 +218,9 @@ function createConfigObjWithForm(ev, configObj) {
     interactionAttributes.push(configObj.interaction_similarity_functions[simFunctionIndex]);
   }
   else if (objDataSim1 === "different") {
-    // vacio
+    let obj = JSON.parse(JSON.stringify(configObj.interaction_similarity_functions[simFunctionIndex]));
+    obj.sim_function.dissimilar = true
+    interactionAttributes.push(obj);
   }
 
   newConfigObj.interaction_similarity_functions = interactionAttributes;
