@@ -84,8 +84,8 @@ const user_prefix = "citizen";
 
 document.addEventListener("DOMContentLoaded", function (event) {
 
-  //http://localhost:8080/v1.1/seed
-  // ./seedFile_ParserOutput.json
+  // http://localhost:8080/v1.1/seed
+  // ./configFile_ParsedOutput.json
   fetch("./configFile_ParsedOutput.json") // Call the fetch function passing the url of the API as a parameter
     .then(configObj => configObj.json())
     .then(function (configObj) {
@@ -205,10 +205,26 @@ function createConfigObjWithForm(ev, configObj) {
     throw "Error: Default option selected in 'sim-obj-1' selector";
   }
 
+  let objDataSim1 = objData["sim-1"];
   let interactionAttributes = [];
-  interactionAttributes.push(configObj.interaction_similarity_functions[simFunctionIndex]);
+  console.log(configObj)
+  console.log(newConfigObj)
+  if (objDataSim1 === "same") {
+    let obj = JSON.parse(JSON.stringify(configObj.interaction_similarity_functions[simFunctionIndex]));
+    obj.sim_function.name = "EqualSimilarityDAO"
+    interactionAttributes.push(obj);
+  }
+  else if (objDataSim1 === "similar") {
+    interactionAttributes.push(configObj.interaction_similarity_functions[simFunctionIndex]);
+  }
+  else if (objDataSim1 === "different") {
+    // vacio
+  }
+
   newConfigObj.interaction_similarity_functions = interactionAttributes;
-    
+
+
+
 
   // Update user attributes with the ones selected by the user
   let newUserAttributes = [];
@@ -230,7 +246,7 @@ function createConfigObjWithForm(ev, configObj) {
     for (const att of configObj.artwork_attributes) {
       let key = `${artwork_prefix}-${att.sim_function.on_attribute.att_name}`;
       if (key in objData) {
-        //att.sim_function.dissimilar = false;
+        att.sim_function.dissimilar = false;
         newArtworkAttributes.push(att);
       }
     }
@@ -244,7 +260,7 @@ function createConfigObjWithForm(ev, configObj) {
       }
     }
   } // && configObj.interaction_similarity_functions[objData["sim-obj-1"]].sim_function.on_attribute.att_name == "emotions"
-  else if (objData["sim-2"] === "same" ) {
+  else if (objData["sim-2"] === "same") {
     let sim = {
       "sim_function": {
         "name": "EqualSimilarityDAO",
