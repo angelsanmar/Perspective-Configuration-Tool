@@ -13,23 +13,23 @@
 			"similarity": "EqualSimilarityDAO"
 		},
 		"Year": {
-			"type": "Number",
+			"type": "float",
 			"similarity": "NumberSimilarityDAO"
 		},
 		"Artwork_start_date": {
-			"type": "Number",
+			"type": "float",
 			"similarity": "NumberSimilarityDAO"
 		},
 		"Artwork_end_date": {
-			"type": "Number",
+			"type": "float",
 			"similarity": "NumberSimilarityDAO"
 		},
 		"Artist_birth_date": {
-			"type": "Number",
+			"type": "float",
 			"similarity": "NumberSimilarityDAO"
 		},
 		"Artist_death_date": {
-			"type": "Number",
+			"type": "float",
 			"similarity": "NumberSimilarityDAO"
 		},
 		"Gender": {
@@ -61,11 +61,11 @@
 			"similarity": "EqualSimilarityDAO"
 		},
 		"Size_height": {
-			"type": "Number",
+			"type": "float",
 			"similarity": "NumberSimilarityDAO"
 		},
 		"Size_width": {
-			"type": "Number",
+			"type": "float",
 			"similarity": "NumberSimilarityDAO"
 		},
 		"Size_depth": {
