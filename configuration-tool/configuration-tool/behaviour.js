@@ -60,7 +60,7 @@ const citizenAttDescription = [
 
 //http://localhost:8080/v1.1/perspective
 function send(config = { "test": "test" }) {
-  fetch("http://localhost:8080/v1.1/perspective", {
+  fetch("http://147.96.25.144:8080/v1.1/perspective", {
     method: 'POST',
     headers: {
       'Accept': 'application/json',
@@ -86,7 +86,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
 
   // http://localhost:8080/v1.1/seed
   // ./configFile_ParsedOutput.json
-  fetch("http://localhost:8080/v1.1/seed") // Call the fetch function passing the url of the API as a parameter
+  fetch("./configFile_ParsedOutput.json") // Call the fetch function passing the url of the API as a parameter
     .then(configObj => configObj.json())
     .then(function (configObj) {
       // First, hide artwork attribute selection
@@ -201,29 +201,31 @@ function createConfigObjWithForm(ev, configObj) {
   newConfigObj["interaction_similarity_functions"] = [];
   simFunctionIndex = objData["sim-obj-1"];
   if (simFunctionIndex == "invalid") {
-    window.alert("Invalid option detected, please select one of the available options in the 2nd selector.");
-    throw "Error: Default option selected in 'sim-obj-1' selector";
+    //   window.alert("Invalid option detected, please select one of the available options in the 2nd selector.");
+    //   throw "Error: Default option selected in 'sim-obj-1' selector";
+    newConfigObj.interaction_similarity_functions = [];
+  }
+  else {
+    let objDataSim1 = objData["sim-1"];
+    let interactionAttributes = [];
+    console.log(configObj)
+    console.log(newConfigObj)
+    if (objDataSim1 === "same") {
+      let obj = JSON.parse(JSON.stringify(configObj.interaction_similarity_functions[simFunctionIndex]));
+      obj.sim_function.name = "EqualSimilarityDAO";
+      interactionAttributes.push(obj);
+    }
+    else if (objDataSim1 === "similar") {
+      interactionAttributes.push(configObj.interaction_similarity_functions[simFunctionIndex]);
+    }
+    else if (objDataSim1 === "different") {
+      let obj = JSON.parse(JSON.stringify(configObj.interaction_similarity_functions[simFunctionIndex]));
+      obj.sim_function.dissimilar = true
+      interactionAttributes.push(obj);
+    }
+    newConfigObj.interaction_similarity_functions = interactionAttributes;
   }
 
-  let objDataSim1 = objData["sim-1"];
-  let interactionAttributes = [];
-  console.log(configObj)
-  console.log(newConfigObj)
-  if (objDataSim1 === "same") {
-    let obj = JSON.parse(JSON.stringify(configObj.interaction_similarity_functions[simFunctionIndex]));
-    obj.sim_function.name = "EqualSimilarityDAO"
-    interactionAttributes.push(obj);
-  }
-  else if (objDataSim1 === "similar") {
-    interactionAttributes.push(configObj.interaction_similarity_functions[simFunctionIndex]);
-  }
-  else if (objDataSim1 === "different") {
-    let obj = JSON.parse(JSON.stringify(configObj.interaction_similarity_functions[simFunctionIndex]));
-    obj.sim_function.dissimilar = true
-    interactionAttributes.push(obj);
-  }
-
-  newConfigObj.interaction_similarity_functions = interactionAttributes;
 
 
 
@@ -251,6 +253,19 @@ function createConfigObjWithForm(ev, configObj) {
         att.sim_function.dissimilar = false;
         newArtworkAttributes.push(att);
       }
+    }
+    if (newArtworkAttributes.length == 0) {
+      let sim = {
+        "sim_function": {
+          "name": "EqualSimilarityDAO",
+          "params": [],
+          "on_attribute": {
+            "att_name": "_id",
+            "att_type": "String"
+          }
+        }
+      };
+      newArtworkAttributes.push(sim);
     }
   }
   else if (objData["sim-2"] === "different") {
@@ -302,7 +317,8 @@ function createConfigObjWithForm(ev, configObj) {
 
   param = "sim-obj-1";
   configName = configName + "-";
-  configName = configName + configObj.interaction_similarity_functions[objData[param]].sim_function.on_attribute.att_name
+  if (newConfigObj.interaction_similarity_functions.length != 0)
+    configName = configName + configObj.interaction_similarity_functions[objData[param]].sim_function.on_attribute.att_name
 
   // if (objData[param] == "emotions")
   //   configName = configName + "Emotions";
