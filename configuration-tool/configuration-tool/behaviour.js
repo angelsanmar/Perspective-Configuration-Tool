@@ -349,8 +349,8 @@ function createConfigObjWithForm(ev, configObj) {
 
   console.log(configName);
 
-  newConfigObj["fileName"] = configName;
-  newConfigObj["fileId"] = configName;
+  newConfigObj["name"] = configName;
+  newConfigObj["id"] = configName;
 
   newConfigObj["algorithm"] = {
     "name": "agglomerative",
