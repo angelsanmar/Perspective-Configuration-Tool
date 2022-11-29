@@ -1,0 +1,5 @@
+{
+    "useLocalSeedFile": true,
+    "localFileName": "seedFile.json",
+    "url": "http://localhost:8080"
+}

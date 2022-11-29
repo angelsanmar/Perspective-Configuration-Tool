@@ -58,9 +58,12 @@ const citizenAttDescription = [
   }
 ];
 
-//http://localhost:8080/v1.1/perspective
+
+
+
+// Send post request
 function send(config = { "test": "test" }) {
-  fetch("http://localhost:8080/v1.1/perspective", {
+  fetch(POST_URL, {
     method: 'POST',
     headers: {
       'Accept': 'application/json',
@@ -70,65 +73,86 @@ function send(config = { "test": "test" }) {
   })
     .then(res => res.json())
     .then(function (res) {
-      console.log(res)
+      console.log("response: " + res)
       window.alert("inserted perspectiveId: " + res.insertedPerspectiveId);
     })
     .catch(function (err) {
+      console.log(err)
       window.alert(err);
     });
 
 }
 
+let POST_URL, GET_URL;
+const postEntryPoint = "/v1.1/perspective";
+const getEntryPoint = "/v1.1/seed";
+
 const artwork_prefix = "artwork";
 const user_prefix = "citizen";
 
 document.addEventListener("DOMContentLoaded", function (event) {
+  // Config Tool setup
+  fetch('./configToolSetup.json')
+    .then(data => data.json())
+    .then(data => {
+      POST_URL = data["url"] + postEntryPoint;
+      if (data["useLocalSeedFile"])
+        GET_URL = "./" + data["localFileName"];
+      else
+        GET_URL = data["url"] + getEntryPoint;
+
+      // Call the fetch function passing the url of the API as a parameter
+      fetch(GET_URL)
+        .then(configObj => configObj.json())
+        .then(function (configObj) {
+          // First, hide artwork attribute selection
+          let artwork_attribs = document.getElementById("artwork-attribs");
+          artwork_attribs.classList.add("hidden");
+
+          // Hide/show artwork attribute selection depending on the word selected before "artwork"
+          let artwork_sim = document.getElementById("similarity-2");
+          artwork_sim.addEventListener("change", function () {
+            let theValue = this.value;
+            if (theValue === "similar" || theValue === "different") {
+              artwork_attribs.classList.remove("hidden");
+            } else {
+              artwork_attribs.classList.add("hidden");
+            }
+          });
+
+          // Create the artwork attribute selector for "similar" artworks
+          let artworkAttDescriptionParsed = parseArtworkAttDescription(configObj.artwork_attributes);
+          if (artworkAttDescriptionParsed.length > 0) {
+            createAttributeSelector("artwork-attribs", artworkAttDescriptionParsed, artwork_prefix);
+          }
+
+          // Create and configure the citizen attribute selector
+          createAttributeSelector("citizen-attribs", configObj.user_attributes, user_prefix);
+
+          // Create dynamic select's using configObj
+          createSelect(configObj)
+
+          // Add form submit listener to create the new config file
+          let form_config = document.getElementById("form-config");
+          form_config.onsubmit = function (ev) {
+            let newConfig = createConfigObjWithForm(ev, configObj);
+            let theTextarea = document.getElementsByTagName("textarea")[0];
+            theTextarea.value = JSON.stringify(newConfig, null, 4);
+            theTextarea.style.height = (theTextarea.scrollHeight) + "px";
+            send(newConfig)
+          }
+        })
+        .catch(function (err) {
+          console.log(err)
+          window.alert("ERROR: Missing seed file");
+        });
+    }).catch(err => {
+      window.alert("ERROR: configToolSetup.json Not found");
+    });
 
   // http://localhost:8080/v1.1/seed
-  // ./configFile_ParsedOutput.json
-  fetch("http://localhost:8080/v1.1/seed") // Call the fetch function passing the url of the API as a parameter
-    .then(configObj => configObj.json())
-    .then(function (configObj) {
-      // First, hide artwork attribute selection
-      let artwork_attribs = document.getElementById("artwork-attribs");
-      artwork_attribs.classList.add("hidden");
+  // ./configFile_ParsedOutput.json ./configHECHT.json
 
-      // Hide/show artwork attribute selection depending on the word selected before "artwork"
-      let artwork_sim = document.getElementById("similarity-2");
-      artwork_sim.addEventListener("change", function () {
-        let theValue = this.value;
-        if (theValue === "similar" || theValue === "different") {
-          artwork_attribs.classList.remove("hidden");
-        } else {
-          artwork_attribs.classList.add("hidden");
-        }
-      });
-
-      // Create the artwork attribute selector for "similar" artworks
-      let artworkAttDescriptionParsed = parseArtworkAttDescription(configObj.artwork_attributes);
-      if (artworkAttDescriptionParsed.length > 0) {
-        createAttributeSelector("artwork-attribs", artworkAttDescriptionParsed, artwork_prefix);
-      }
-
-      // Create and configure the citizen attribute selector
-      createAttributeSelector("citizen-attribs", configObj.user_attributes, user_prefix);
-
-      createSelect(configObj)
-
-      // Add form submit listener to create the new config file
-      let form_config = document.getElementById("form-config");
-      form_config.onsubmit = function (ev) {
-        let newConfig = createConfigObjWithForm(ev, configObj);
-        let theTextarea = document.getElementsByTagName("textarea")[0];
-        theTextarea.value = JSON.stringify(newConfig, null, 4);
-        theTextarea.style.height = (theTextarea.scrollHeight) + "px";
-        send(newConfig)
-      }
-    })
-    .catch(function (err) {
-      console.log(err)
-      window.alert("Missing config.json");
-    });
 });
 
 
@@ -137,7 +161,10 @@ document.addEventListener("DOMContentLoaded", function (event) {
  * @param {object} configObj Original config object to create the new one 
  */
 function createSelect(configObj) {
-  // Default option
+  // En los valores se usa el index en el array. Para despues no tener que hacer una 
+  // busqueda de la interaction_similarity_functions que se eligio en el desplegable
+
+  // Default option = invalid
   options = '<option value="invalid" selected>Select option</option>'
   let i = 0;
   for (const elem of configObj.interaction_similarity_functions) {
@@ -201,31 +228,29 @@ function createConfigObjWithForm(ev, configObj) {
   newConfigObj["interaction_similarity_functions"] = [];
   simFunctionIndex = objData["sim-obj-1"];
   if (simFunctionIndex == "invalid") {
-    window.alert("Invalid option detected, please select one of the available options in the 2nd selector.");
-    throw "Error: Default option selected in 'sim-obj-1' selector";
+    // If not selected then empty
+    //   window.alert("Invalid option detected, please select one of the available options in the 2nd selector.");
+    //   throw "Error: Default option selected in 'sim-obj-1' selector";
+    newConfigObj.interaction_similarity_functions = [];
   }
-
-  let objDataSim1 = objData["sim-1"];
-  let interactionAttributes = [];
-  console.log(configObj)
-  console.log(newConfigObj)
-  if (objDataSim1 === "same") {
-    let obj = JSON.parse(JSON.stringify(configObj.interaction_similarity_functions[simFunctionIndex]));
-    obj.sim_function.name = "EqualSimilarityDAO"
-    interactionAttributes.push(obj);
+  else {
+    let objDataSim1 = objData["sim-1"];
+    let interactionAttributes = [];
+    if (objDataSim1 === "same") {
+      let obj = JSON.parse(JSON.stringify(configObj.interaction_similarity_functions[simFunctionIndex]));
+      obj.sim_function.name = "EqualSimilarityDAO";
+      interactionAttributes.push(obj);
+    }
+    else if (objDataSim1 === "similar") {
+      interactionAttributes.push(configObj.interaction_similarity_functions[simFunctionIndex]);
+    }
+    else if (objDataSim1 === "different") {
+      let obj = JSON.parse(JSON.stringify(configObj.interaction_similarity_functions[simFunctionIndex]));
+      obj.sim_function.dissimilar = true
+      interactionAttributes.push(obj);
+    }
+    newConfigObj.interaction_similarity_functions = interactionAttributes;
   }
-  else if (objDataSim1 === "similar") {
-    interactionAttributes.push(configObj.interaction_similarity_functions[simFunctionIndex]);
-  }
-  else if (objDataSim1 === "different") {
-    let obj = JSON.parse(JSON.stringify(configObj.interaction_similarity_functions[simFunctionIndex]));
-    obj.sim_function.dissimilar = true
-    interactionAttributes.push(obj);
-  }
-
-  newConfigObj.interaction_similarity_functions = interactionAttributes;
-
-
 
 
   // Update user attributes with the ones selected by the user
@@ -252,6 +277,20 @@ function createConfigObjWithForm(ev, configObj) {
         newArtworkAttributes.push(att);
       }
     }
+    if (newArtworkAttributes.length == 0) {
+      // If not selected any attribute then use _id
+      let sim = {
+        "sim_function": {
+          "name": "EqualSimilarityDAO",
+          "params": [],
+          "on_attribute": {
+            "att_name": "_id",
+            "att_type": "String"
+          }
+        }
+      };
+      newArtworkAttributes.push(sim);
+    }
   }
   else if (objData["sim-2"] === "different") {
     for (const att of configObj.artwork_attributes) {
@@ -261,7 +300,7 @@ function createConfigObjWithForm(ev, configObj) {
         newArtworkAttributes.push(att);
       }
     }
-  } // && configObj.interaction_similarity_functions[objData["sim-obj-1"]].sim_function.on_attribute.att_name == "emotions"
+  } 
   else if (objData["sim-2"] === "same") {
     let sim = {
       "sim_function": {
@@ -302,7 +341,8 @@ function createConfigObjWithForm(ev, configObj) {
 
   param = "sim-obj-1";
   configName = configName + "-";
-  configName = configName + configObj.interaction_similarity_functions[objData[param]].sim_function.on_attribute.att_name
+  if (newConfigObj.interaction_similarity_functions.length != 0)
+    configName = configName + configObj.interaction_similarity_functions[objData[param]].sim_function.on_attribute.att_name
 
   // if (objData[param] == "emotions")
   //   configName = configName + "Emotions";
@@ -328,13 +368,13 @@ function createConfigObjWithForm(ev, configObj) {
     }
   }
 
-  if (artwork_attributesName.length)
+  if (artwork_attributesName.length && objData["sim-2"] != "same")
     configName = configName + " (" + artwork_attributesName.join(", ") + ")";
 
-  console.log(configName);
+  console.log("perspectiveName: " + configName);
 
-  newConfigObj["fileName"] = configName;
-  newConfigObj["fileId"] = configName;
+  newConfigObj["name"] = configName;
+  newConfigObj["id"] = configName;
 
   newConfigObj["algorithm"] = {
     "name": "agglomerative",
