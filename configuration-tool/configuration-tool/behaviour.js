@@ -60,7 +60,7 @@ const citizenAttDescription = [
 
 //http://localhost:8080/v1.1/perspective
 function send(config = { "test": "test" }) {
-  fetch("http://147.96.25.144:8080/v1.1/perspective", {
+  fetch("http://localhost:8080/v1.1/perspective", {
     method: 'POST',
     headers: {
       'Accept': 'application/json',
@@ -70,10 +70,12 @@ function send(config = { "test": "test" }) {
   })
     .then(res => res.json())
     .then(function (res) {
+      // console.log(res.status);
       console.log(res)
       window.alert("inserted perspectiveId: " + res.insertedPerspectiveId);
     })
     .catch(function (err) {
+      console.log(err)
       window.alert(err);
     });
 
@@ -85,8 +87,8 @@ const user_prefix = "citizen";
 document.addEventListener("DOMContentLoaded", function (event) {
 
   // http://localhost:8080/v1.1/seed
-  // ./configFile_ParsedOutput.json
-  fetch("./configFile_ParsedOutput.json") // Call the fetch function passing the url of the API as a parameter
+  // ./configFile_ParsedOutput.json ./configAngel.json
+  fetch("http://localhost:8080/v1.1/seed") // Call the fetch function passing the url of the API as a parameter
     .then(configObj => configObj.json())
     .then(function (configObj) {
       // First, hide artwork attribute selection
@@ -344,7 +346,7 @@ function createConfigObjWithForm(ev, configObj) {
     }
   }
 
-  if (artwork_attributesName.length)
+  if (artwork_attributesName.length && objData["sim-2"] != "same")
     configName = configName + " (" + artwork_attributesName.join(", ") + ")";
 
   console.log(configName);
