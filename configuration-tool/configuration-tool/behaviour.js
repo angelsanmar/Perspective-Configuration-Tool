@@ -87,8 +87,8 @@ const user_prefix = "citizen";
 document.addEventListener("DOMContentLoaded", function (event) {
 
   // http://localhost:8080/v1.1/seed
-  // ./configFile_ParsedOutput.json ./configAngel.json
-  fetch("http://localhost:8080/v1.1/seed") // Call the fetch function passing the url of the API as a parameter
+  // ./configFile_ParsedOutput.json ./configHECHT.json
+  fetch("./configHECHT.json") // Call the fetch function passing the url of the API as a parameter
     .then(configObj => configObj.json())
     .then(function (configObj) {
       // First, hide artwork attribute selection

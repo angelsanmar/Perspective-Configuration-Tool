@@ -1,0 +1,163 @@
+{
+    "artwork_attributes": [
+        {
+            "sim_function": {
+                "name": "TableSimilarityDAO",
+                "params": [],
+                "on_attribute": {
+                    "att_name": "beliefJ",
+                    "att_type": "String"
+                }
+            }
+        },
+        {
+            "sim_function": {
+                "name": "TableSimilarityDAO",
+                "params": [],
+                "on_attribute": {
+                    "att_name": "beliefR",
+                    "att_type": "String"
+                }
+            }
+        },
+        {
+            "sim_function": {
+                "name": "TableSimilarityDAO",
+                "params": [],
+                "on_attribute": {
+                    "att_name": "beliefE",
+                    "att_type": "String"
+                }
+            }
+        },
+        {
+            "sim_function": {
+                "name": "NumberSimilarityDAO",
+                "params": [],
+                "on_attribute": {
+                    "att_name": "AOTChange",
+                    "att_type": "String"
+                }
+            }
+        },
+        {
+            "sim_function": {
+                "name": "NumberSimilarityDAO",
+                "params": [],
+                "on_attribute": {
+                    "att_name": "AOTPrep",
+                    "att_type": "String"
+                }
+            }
+        },
+        {
+            "sim_function": {
+                "name": "NumberSimilarityDAO",
+                "params": [],
+                "on_attribute": {
+                    "att_name": "AOTPost",
+                    "att_type": "String"
+                }
+            }
+        },
+        {
+            "sim_function": {
+                "name": "NumberSimilarityDAO",
+                "params": [],
+                "on_attribute": {
+                    "att_name": "RHMSPrep",
+                    "att_type": "String"
+                }
+            }
+        },
+        {
+            "sim_function": {
+                "name": "NumberSimilarityDAO",
+                "params": [],
+                "on_attribute": {
+                    "att_name": "RHMSPost",
+                    "att_type": "String"
+                }
+            }
+        },
+        {
+            "sim_function": {
+                "name": "NumberSimilarityDAO",
+                "params": [],
+                "on_attribute": {
+                    "att_name": "RHMSChange",
+                    "att_type": "String"
+                }
+            }
+        },
+        
+
+        {
+            "sim_function": {
+                "name": "EqualSimilarityDAO",
+                "params": [],
+                "on_attribute": {
+                    "att_name": "_Exhibition_Curation",
+                    "att_type": "String"
+                }
+            }
+        },
+        {
+            "sim_function": {
+                "name": "EqualSimilarityDAO",
+                "params": [],
+                "on_attribute": {
+                    "att_name": "Joseph_Flavius",
+                    "att_type": "String"
+                }
+            }
+        },
+        {
+            "sim_function": {
+                "name": "EqualSimilarityDAO",
+                "params": [],
+                "on_attribute": {
+                    "att_name": "Galillee_Rebellion",
+                    "att_type": "String"
+                }
+            }
+        }
+    ],
+    "user_attributes": [
+        {
+            "att_name": "DemographicsGender",
+            "att_type": "String"
+        },
+        {
+            "att_name": "DemographicsGrade",
+            "att_type": "String"
+        },
+        {
+            "att_name": "DemographicsReligous",
+            "att_type": "String"
+        },
+        {
+            "att_name": "DemographicsEducationType",
+            "att_type": "String"
+        },
+        {
+            "att_name": "School",
+            "att_type": "String"
+        },
+        {
+            "att_name": "DemographicsPolitics",
+            "att_type": "String"
+        },
+        {
+            "att_name": "ParticipantType",
+            "att_type": "String"
+        },
+        {
+            "att_name": "DemographicsIdentity",
+            "att_type": "String"
+        }
+    ],
+    "interaction_similarity_functions": [
+
+    ]
+}
