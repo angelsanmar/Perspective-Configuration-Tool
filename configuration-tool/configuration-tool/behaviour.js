@@ -129,6 +129,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
           // Create and configure the citizen attribute selector
           createAttributeSelector("citizen-attribs", configObj.user_attributes, user_prefix);
 
+          // Create dynamic select's using configObj
           createSelect(configObj)
 
           // Add form submit listener to create the new config file
@@ -143,10 +144,8 @@ document.addEventListener("DOMContentLoaded", function (event) {
         })
         .catch(function (err) {
           console.log(err)
-          window.alert("Missing config.json");
+          window.alert("ERROR: Missing seed file");
         });
-
-
     }).catch(err => {
       window.alert("ERROR: configToolSetup.json Not found");
     });
@@ -162,7 +161,10 @@ document.addEventListener("DOMContentLoaded", function (event) {
  * @param {object} configObj Original config object to create the new one 
  */
 function createSelect(configObj) {
-  // Default option
+  // En los valores se usa el index en el array. Para despues no tener que hacer una 
+  // busqueda de la interaction_similarity_functions que se eligio en el desplegable
+
+  // Default option = invalid
   options = '<option value="invalid" selected>Select option</option>'
   let i = 0;
   for (const elem of configObj.interaction_similarity_functions) {
@@ -226,6 +228,7 @@ function createConfigObjWithForm(ev, configObj) {
   newConfigObj["interaction_similarity_functions"] = [];
   simFunctionIndex = objData["sim-obj-1"];
   if (simFunctionIndex == "invalid") {
+    // If not selected then empty
     //   window.alert("Invalid option detected, please select one of the available options in the 2nd selector.");
     //   throw "Error: Default option selected in 'sim-obj-1' selector";
     newConfigObj.interaction_similarity_functions = [];
@@ -248,9 +251,6 @@ function createConfigObjWithForm(ev, configObj) {
     }
     newConfigObj.interaction_similarity_functions = interactionAttributes;
   }
-
-
-
 
 
   // Update user attributes with the ones selected by the user
@@ -278,6 +278,7 @@ function createConfigObjWithForm(ev, configObj) {
       }
     }
     if (newArtworkAttributes.length == 0) {
+      // If not selected any attribute then use _id
       let sim = {
         "sim_function": {
           "name": "EqualSimilarityDAO",
@@ -299,7 +300,7 @@ function createConfigObjWithForm(ev, configObj) {
         newArtworkAttributes.push(att);
       }
     }
-  } // && configObj.interaction_similarity_functions[objData["sim-obj-1"]].sim_function.on_attribute.att_name == "emotions"
+  } 
   else if (objData["sim-2"] === "same") {
     let sim = {
       "sim_function": {
@@ -370,7 +371,7 @@ function createConfigObjWithForm(ev, configObj) {
   if (artwork_attributesName.length && objData["sim-2"] != "same")
     configName = configName + " (" + artwork_attributesName.join(", ") + ")";
 
-  console.log("configName: " + configName);
+  console.log("perspectiveName: " + configName);
 
   newConfigObj["name"] = configName;
   newConfigObj["id"] = configName;
