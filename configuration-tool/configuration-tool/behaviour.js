@@ -278,13 +278,13 @@ function createConfigObjWithForm(ev, configObj) {
       }
     }
     if (newArtworkAttributes.length == 0) {
-      // If not selected any attribute then use _id
+      // If not selected any attribute then use id
       let sim = {
         "sim_function": {
           "name": "EqualSimilarityDAO",
           "params": [],
           "on_attribute": {
-            "att_name": "_id",
+            "att_name": "id",
             "att_type": "String"
           }
         }
@@ -307,7 +307,7 @@ function createConfigObjWithForm(ev, configObj) {
         "name": "EqualSimilarityDAO",
         "params": [],
         "on_attribute": {
-          "att_name": "_id",
+          "att_name": "id",
           "att_type": "String"
         }
       }
